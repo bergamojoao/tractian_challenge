@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'config/injector.dart';
+import 'data/models/company.dart';
 import 'interactors/cubits/asset_tree_cubit.dart';
 import 'interactors/cubits/home_cubit.dart';
 import 'ui/pages/assets_page.dart';
@@ -18,10 +19,12 @@ class AppWidget extends StatelessWidget {
         builder: (context, state) => const HomePage(),
       ),
       GoRoute(
-        path: '/assets/:company_id',
-        builder: (context, state) => AssetsPage(
-          companyId: state.pathParameters['company_id']!,
-        ),
+        path: '/assets/:company',
+        builder: (context, state) {
+          return AssetsPage(
+            company: Company.fromJson(state.pathParameters['company']!),
+          );
+        },
       ),
     ],
   );

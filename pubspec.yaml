@@ -27,3 +27,6 @@ flutter:
   assets:
     - assets/images/tractian_logo.png
     - assets/images/company.png
+    - assets/images/location.png
+    - assets/images/asset.png
+    - assets/images/component.png

@@ -8,6 +8,6 @@ class Location {
   factory Location.fromJson(Map<String, dynamic> json) => Location(
         id: json['id'],
         name: json['name'],
-        parentId: json['name'],
+        parentId: json['parentId'],
       );
 }

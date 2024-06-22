@@ -23,7 +23,7 @@ class CompanyList extends StatelessWidget {
           var company = companies[index];
           return CompanyButton(
             onPressed: () {
-              context.push('/assets/${company.id}');
+              context.push('/assets/${company.toJson()}');
             },
             title: company.name,
           );

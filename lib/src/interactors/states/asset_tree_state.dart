@@ -1,3 +1,5 @@
+import 'package:tractian_challenge/src/data/models/tree_node.dart';
+
 sealed class AssetTreeState {}
 
 class LoadingAssetTreeState implements AssetTreeState {
@@ -5,7 +7,8 @@ class LoadingAssetTreeState implements AssetTreeState {
 }
 
 class GettedAssetTreeState implements AssetTreeState {
-  const GettedAssetTreeState();
+  final TreeNode assetTree;
+  const GettedAssetTreeState({required this.assetTree});
 }
 
 class FailureAssetTreeState implements AssetTreeState {

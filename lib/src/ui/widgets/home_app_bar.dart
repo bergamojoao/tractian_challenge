@@ -8,6 +8,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     var sw = MediaQuery.of(context).size.width;
     return AppBar(
       backgroundColor: const Color(0xFF17192D),
+      scrolledUnderElevation: 0,
       centerTitle: true,
       title: Image.asset(
         'assets/images/tractian_logo.png',

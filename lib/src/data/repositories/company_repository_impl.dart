@@ -17,7 +17,7 @@ class CompanyRepositoryImpl implements CompanyRepository {
 
     var list = response.data as List;
 
-    return list.map((json) => Company.fromJson(json)).toList();
+    return list.map((json) => Company.fromMap(json)).toList();
   }
 
   @override

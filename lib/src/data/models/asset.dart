@@ -22,6 +22,11 @@ class Asset {
   factory Asset.fromJson(Map<String, dynamic> json) => Asset(
         id: json['id'],
         name: json['name'],
-        parentId: json['name'],
+        parentId: json['parentId'],
+        locationId: json['locationId'],
+        sensorId: json['sensorId'],
+        sensorType: json['sensorType'],
+        status: json['status'],
+        gatewayId: json['gatewayId'],
       );
 }
