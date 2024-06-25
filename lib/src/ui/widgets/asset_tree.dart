@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tractian_challenge/src/data/models/asset.dart';
-import 'package:tractian_challenge/src/data/models/location.dart';
-import 'package:tractian_challenge/src/data/models/tree_node.dart';
-import 'package:tractian_challenge/src/ui/widgets/custom_expansion_tile.dart';
+
+import '../../data/models/asset.dart';
+import '../../data/models/location.dart';
+import '../../data/models/tree_node.dart';
+import 'custom_expansion_tile.dart';
 
 class AssetTree extends StatelessWidget {
   final TreeNode assetTree;

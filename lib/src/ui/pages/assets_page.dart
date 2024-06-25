@@ -7,6 +7,9 @@ import 'package:tractian_challenge/src/interactors/states/asset_tree_state.dart'
 import 'package:tractian_challenge/src/ui/widgets/asset_tree.dart';
 import 'package:tractian_challenge/src/ui/widgets/default_app_bar.dart';
 
+import '../widgets/filter_button.dart';
+import '../widgets/filter_widget.dart';
+
 class AssetsPage extends StatefulWidget {
   final Company company;
   const AssetsPage({super.key, required this.company});
@@ -40,7 +43,15 @@ class _AssetsPageState extends State<AssetsPage> {
           appBar: const DefaultAppBar(
             title: 'Assets',
           ),
-          body: body,
+          body: Column(
+            children: [
+              FilterWidget(company: widget.company),
+              const Divider(
+                height: 0,
+              ),
+              Expanded(child: body),
+            ],
+          ),
         );
       },
     );
