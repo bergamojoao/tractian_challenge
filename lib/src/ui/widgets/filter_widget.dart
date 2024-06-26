@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tractian_challenge/src/config/injector.dart';
 import 'package:tractian_challenge/src/data/models/company.dart';
 import 'package:tractian_challenge/src/interactors/cubits/asset_tree_cubit.dart';
+import 'package:tractian_challenge/src/utils/debouncer.dart';
 
 import 'filter_button.dart';
 
@@ -19,7 +20,8 @@ class FilterWidget extends StatefulWidget {
 class _FilterWidgetState extends State<FilterWidget> {
   bool filterByEnergy = false;
   bool filterByCritical = false;
-  final _textEditingController = TextEditingController();
+  final _searchController = TextEditingController();
+  final debouncer = Debouncer(delay: const Duration(milliseconds: 100));
 
   @override
   void initState() {
@@ -30,7 +32,7 @@ class _FilterWidgetState extends State<FilterWidget> {
     var cubit = injector.get<AssetTreeCubit>();
     cubit.filterAssetTree(
         company: widget.company,
-        search: _textEditingController.value.text,
+        search: _searchController.value.text,
         filterByEnergy: filterByEnergy,
         filterByCritical: filterByCritical);
   }
@@ -43,7 +45,7 @@ class _FilterWidgetState extends State<FilterWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
-            controller: _textEditingController,
+            controller: _searchController,
             style: const TextStyle(
               color: Color(0xFF8E98A3),
             ),
@@ -61,7 +63,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                   borderSide: BorderSide.none,
                 ),
                 contentPadding: EdgeInsets.all(0)),
-            onChanged: (value) => _applyFilters(),
+            onChanged: (value) => debouncer.debounce(_applyFilters),
           ),
           const SizedBox(height: 10),
           Wrap(
@@ -76,6 +78,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                     filterByEnergy = !filterByEnergy;
                     filterByCritical = false;
                   });
+                  _searchController.clear();
                   _applyFilters();
                 },
               ),
@@ -88,6 +91,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                     filterByCritical = !filterByCritical;
                     filterByEnergy = false;
                   });
+                  _searchController.clear();
                   _applyFilters();
                 },
               ),

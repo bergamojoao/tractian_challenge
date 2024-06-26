@@ -27,11 +27,13 @@ class AssetTree extends StatelessWidget {
 
     if (content is Location || content is Asset) {
       return CustomExpansionTile(
+        isExpanded: true,
         title: Row(
           children: [
-            _getContentIcon(content),
+            _getContentHeadingIcon(content),
             const SizedBox(width: 6),
             Text(content.name),
+            _getContentTrailingIcon(content),
           ],
         ),
         children:
@@ -42,7 +44,7 @@ class AssetTree extends StatelessWidget {
     return Container();
   }
 
-  Widget _getContentIcon(Object content) {
+  Widget _getContentHeadingIcon(Object content) {
     return switch (content) {
       (Location _) => Image.asset('assets/images/location.png', width: 22),
       (Asset asset) => asset.sensorType != null
@@ -50,5 +52,26 @@ class AssetTree extends StatelessWidget {
           : Image.asset('assets/images/asset.png', width: 22),
       _ => const SizedBox.shrink(),
     };
+  }
+
+  Widget _getContentTrailingIcon(Object content) {
+    if (content is Asset) {
+      if (content.status == 'alert') {
+        return Container(
+          width: 8,
+          height: 8,
+          margin: const EdgeInsets.only(left: 5),
+          decoration: const BoxDecoration(
+              color: Color(0xFFED3833),
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+        );
+      }
+
+      if (content.sensorType == 'energy') {
+        return const Icon(Icons.bolt, color: Color(0xFF52C41A));
+      }
+    }
+
+    return const SizedBox.shrink();
   }
 }

@@ -66,22 +66,25 @@ class AssetTreeCubit extends Cubit<AssetTreeState> {
       var assetTree = await _getAssetTree(company);
 
       var filteredTree = TreeNode.filter(assetTree, (node) {
-        if ([Company, Location].contains(node.content.runtimeType)) {
+        var content = node.content;
+
+        if ((filterByEnergy || filterByCritical) && content is! Asset) {
           return false;
         }
 
-        var content = node.content as Asset;
-
-        if (search.isNotEmpty && !search.contains(content.name)) {
+        if (search.isNotEmpty &&
+            !content.name.toUpperCase().contains(search.toUpperCase())) {
           return false;
         }
 
-        if (filterByEnergy && content.sensorType != 'energy') {
-          return false;
-        }
+        if (content is Asset) {
+          if (filterByEnergy && content.sensorType != 'energy') {
+            return false;
+          }
 
-        if (filterByCritical && content.status != 'alert') {
-          return false;
+          if (filterByCritical && content.status != 'alert') {
+            return false;
+          }
         }
 
         return true;

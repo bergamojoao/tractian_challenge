@@ -38,15 +38,15 @@ class TreeNode<T> {
   static TreeNode? filter(TreeNode node, bool Function(TreeNode) condition) {
     List<TreeNode> filteredChildren = [];
 
-    // Recursively filter children
     for (var child in node.children) {
       TreeNode? filteredChild = filter(child, condition);
       if (filteredChild != null) {
         filteredChildren.add(filteredChild);
+      } else if (condition(node)) {
+        filteredChildren.add(child);
       }
     }
 
-    // If the current node satisfies the condition or has any filtered children, include it
     if (condition(node) || filteredChildren.isNotEmpty) {
       var filteredNode = TreeNode(id: node.id, content: node.content);
       for (var child in filteredChildren) {
@@ -55,7 +55,6 @@ class TreeNode<T> {
       return filteredNode;
     }
 
-    // If the current node doesn't satisfy the condition and has no filtered children, return null
     return null;
   }
 }
