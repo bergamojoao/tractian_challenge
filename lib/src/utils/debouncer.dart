@@ -6,7 +6,7 @@ class Debouncer {
   Timer? _timer;
   VoidCallback? _callback;
 
-  Debouncer({this.delay = const Duration(milliseconds: 600)});
+  Debouncer({this.delay = const Duration(milliseconds: 500)});
 
   void debounce(VoidCallback callback) {
     _callback = callback;

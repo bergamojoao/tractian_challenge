@@ -21,7 +21,7 @@ class _FilterWidgetState extends State<FilterWidget> {
   bool filterByEnergy = false;
   bool filterByCritical = false;
   final _searchController = TextEditingController();
-  final debouncer = Debouncer(delay: const Duration(milliseconds: 100));
+  final debouncer = Debouncer();
 
   @override
   void initState() {
@@ -62,7 +62,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                   borderSide: BorderSide.none,
                 ),
                 contentPadding: EdgeInsets.all(0)),
-            onChanged: (value) => debouncer.debounce(_applyFilters),
+            onChanged: (value) => debouncer.debounce(() => _applyFilters()),
           ),
           const SizedBox(height: 10),
           Wrap(
