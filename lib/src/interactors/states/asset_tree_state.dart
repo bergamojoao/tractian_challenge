@@ -1,5 +1,4 @@
-import 'package:tractian_challenge/src/data/models/company.dart';
-
+import '../../data/models/company.dart';
 import '../../data/models/tree_node.dart';
 
 sealed class AssetTreeState {}

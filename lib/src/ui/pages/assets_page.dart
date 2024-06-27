@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tractian_challenge/src/config/injector.dart';
-import 'package:tractian_challenge/src/data/models/company.dart';
-import 'package:tractian_challenge/src/interactors/cubits/asset_tree_cubit.dart';
-import 'package:tractian_challenge/src/interactors/states/asset_tree_state.dart';
-import 'package:tractian_challenge/src/ui/widgets/asset_tree.dart';
-import 'package:tractian_challenge/src/ui/widgets/default_app_bar.dart';
 
+import '../../config/injector.dart';
+import '../../data/models/company.dart';
+import '../../interactors/cubits/asset_tree_cubit.dart';
+import '../../interactors/states/asset_tree_state.dart';
+import '../widgets/asset_tree.dart';
+import '../widgets/default_app_bar.dart';
 import '../widgets/filter_widget.dart';
 
 class AssetsPage extends StatefulWidget {

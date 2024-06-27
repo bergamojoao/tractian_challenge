@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tractian_challenge/src/data/models/company.dart';
 
 import '../../data/models/asset.dart';
+import '../../data/models/company.dart';
 import '../../data/models/location.dart';
 import '../../data/models/tree_node.dart';
 
@@ -38,7 +38,7 @@ class _AssetTreeState extends State<AssetTree> {
     if (currentNode.content is Company) return const SizedBox.shrink();
 
     return Padding(
-      padding: EdgeInsets.only(left: level * 16, top: 5, bottom: 5),
+      padding: EdgeInsets.only(left: (level - 1) * 16, top: 5, bottom: 5),
       child: InkWell(
         child: Row(
           children: [

@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tractian_challenge/src/data/models/asset.dart';
-import 'package:tractian_challenge/src/data/models/location.dart';
-import 'package:tractian_challenge/src/data/models/tree_node.dart';
 
+import '../../data/models/asset.dart';
 import '../../data/models/company.dart';
+import '../../data/models/location.dart';
+import '../../data/models/tree_node.dart';
 import '../../data/repositories/company_repository.dart';
 import '../states/asset_tree_state.dart';
 
@@ -14,39 +14,7 @@ class AssetTreeCubit extends Cubit<AssetTreeState> {
   loadAssetTree({required Company company}) async {
     emit(const LoadingAssetTreeState());
     try {
-      company.locations =
-          await companyRepository.findLocations(companyId: company.id);
-
-      company.assets =
-          await companyRepository.findAssets(companyId: company.id);
-
-      List<TreeNode> nodeList = [
-        TreeNode<Company>(
-          content: company,
-          id: company.id,
-          isExpanded: true,
-        )
-      ];
-
-      for (var location in company.locations) {
-        nodeList.add(TreeNode<Location>(
-          content: location,
-          id: location.id,
-          parentId: location.parentId ?? company.id,
-        ));
-      }
-
-      for (var asset in company.assets) {
-        nodeList.add(
-          TreeNode<Asset>(
-            content: asset,
-            id: asset.id,
-            parentId: asset.locationId ?? asset.parentId ?? company.id,
-          ),
-        );
-      }
-
-      var assetTree = _getAssetTree(company);
+      var assetTree = await _getAssetTree(company);
 
       emit(GettedAssetTreeState(company: company, assetTree: assetTree!));
     } catch (e) {
@@ -54,7 +22,12 @@ class AssetTreeCubit extends Cubit<AssetTreeState> {
     }
   }
 
-  TreeNode? _getAssetTree(Company company) {
+  Future<TreeNode?> _getAssetTree(Company company) async {
+    company.locations =
+        await companyRepository.findLocations(companyId: company.id);
+
+    company.assets = await companyRepository.findAssets(companyId: company.id);
+
     List<TreeNode> nodeList = [
       TreeNode<Company>(
         content: company,
@@ -96,7 +69,7 @@ class AssetTreeCubit extends Cubit<AssetTreeState> {
 
     emit(const LoadingAssetTreeState());
     try {
-      var assetTree = _getAssetTree(currentState.company);
+      var assetTree = await _getAssetTree(currentState.company);
 
       var filteredTree = TreeNode.filter(assetTree!, (node) {
         var content = node.content;

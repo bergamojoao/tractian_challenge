@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tractian_challenge/src/config/injector.dart';
-import 'package:tractian_challenge/src/interactors/cubits/home_cubit.dart';
 
+import '../../config/injector.dart';
+import '../../interactors/cubits/home_cubit.dart';
 import '../../interactors/states/home_state.dart';
 import '../widgets/company_list.dart';
 import '../widgets/home_app_bar.dart';

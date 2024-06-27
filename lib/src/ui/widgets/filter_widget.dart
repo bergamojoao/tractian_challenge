@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tractian_challenge/src/config/injector.dart';
-import 'package:tractian_challenge/src/data/models/company.dart';
-import 'package:tractian_challenge/src/interactors/cubits/asset_tree_cubit.dart';
-import 'package:tractian_challenge/src/utils/debouncer.dart';
 
+import '../../config/injector.dart';
+import '../../data/models/company.dart';
+import '../../interactors/cubits/asset_tree_cubit.dart';
+import '../../utils/debouncer.dart';
 import 'filter_button.dart';
 
 class FilterWidget extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:tractian_challenge/src/data/models/asset.dart';
-import 'package:tractian_challenge/src/data/models/location.dart';
 
+import '../models/asset.dart';
 import '../models/company.dart';
+import '../models/location.dart';
 import 'company_repository.dart';
 
 class CompanyRepositoryImpl implements CompanyRepository {
