@@ -14,7 +14,39 @@ class AssetTreeCubit extends Cubit<AssetTreeState> {
   loadAssetTree({required Company company}) async {
     emit(const LoadingAssetTreeState());
     try {
-      var assetTree = await _getAssetTree(company);
+      company.locations =
+          await companyRepository.findLocations(companyId: company.id);
+
+      company.assets =
+          await companyRepository.findAssets(companyId: company.id);
+
+      List<TreeNode> nodeList = [
+        TreeNode<Company>(
+          content: company,
+          id: company.id,
+          isExpanded: true,
+        )
+      ];
+
+      for (var location in company.locations) {
+        nodeList.add(TreeNode<Location>(
+          content: location,
+          id: location.id,
+          parentId: location.parentId ?? company.id,
+        ));
+      }
+
+      for (var asset in company.assets) {
+        nodeList.add(
+          TreeNode<Asset>(
+            content: asset,
+            id: asset.id,
+            parentId: asset.locationId ?? asset.parentId ?? company.id,
+          ),
+        );
+      }
+
+      var assetTree = _getAssetTree(company);
 
       emit(GettedAssetTreeState(company: company, assetTree: assetTree!));
     } catch (e) {
@@ -22,18 +54,16 @@ class AssetTreeCubit extends Cubit<AssetTreeState> {
     }
   }
 
-  _getAssetTree(Company company) async {
+  TreeNode? _getAssetTree(Company company) {
     List<TreeNode> nodeList = [
       TreeNode<Company>(
         content: company,
         id: company.id,
+        isExpanded: true,
       )
     ];
 
-    var locations =
-        await companyRepository.findLocations(companyId: company.id);
-
-    for (var location in locations) {
+    for (var location in company.locations) {
       nodeList.add(TreeNode<Location>(
         content: location,
         id: location.id,
@@ -41,9 +71,7 @@ class AssetTreeCubit extends Cubit<AssetTreeState> {
       ));
     }
 
-    var assets = await companyRepository.findAssets(companyId: company.id);
-
-    for (var asset in assets) {
+    for (var asset in company.assets) {
       nodeList.add(
         TreeNode<Asset>(
           content: asset,
@@ -57,15 +85,20 @@ class AssetTreeCubit extends Cubit<AssetTreeState> {
   }
 
   filterAssetTree(
-      {required Company company,
-      required String search,
+      {required String search,
       required bool filterByEnergy,
       required bool filterByCritical}) async {
+    if (state is! GettedAssetTreeState) {
+      return;
+    }
+
+    var currentState = state as GettedAssetTreeState;
+
     emit(const LoadingAssetTreeState());
     try {
-      var assetTree = await _getAssetTree(company);
+      var assetTree = _getAssetTree(currentState.company);
 
-      var filteredTree = TreeNode.filter(assetTree, (node) {
+      var filteredTree = TreeNode.filter(assetTree!, (node) {
         var content = node.content;
 
         if ((filterByEnergy || filterByCritical) && content is! Asset) {
@@ -90,10 +123,17 @@ class AssetTreeCubit extends Cubit<AssetTreeState> {
         return true;
       });
 
-      emit(GettedAssetTreeState(
-          company: company,
-          assetTree:
-              filteredTree ?? TreeNode(content: company, id: company.id)));
+      emit(
+        GettedAssetTreeState(
+          company: currentState.company,
+          assetTree: filteredTree ??
+              TreeNode(
+                content: currentState.company,
+                id: currentState.company.id,
+                isExpanded: true,
+              ),
+        ),
+      );
     } catch (e) {
       emit(const FailureAssetTreeState('Error while loading asset tree'));
     }

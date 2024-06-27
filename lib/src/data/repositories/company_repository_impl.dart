@@ -28,7 +28,7 @@ class CompanyRepositoryImpl implements CompanyRepository {
 
     var list = response.data as List;
 
-    return list.map((json) => Location.fromJson(json)).toList();
+    return list.map((json) => Location.fromMap(json)).toList();
   }
 
   @override
@@ -39,6 +39,6 @@ class CompanyRepositoryImpl implements CompanyRepository {
 
     var list = response.data as List;
 
-    return list.map((json) => Asset.fromJson(json)).toList();
+    return list.map((json) => Asset.fromMap(json)).toList();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Asset {
   final String id;
   final String name;
@@ -19,14 +21,24 @@ class Asset {
     this.gatewayId,
   });
 
-  factory Asset.fromJson(Map<String, dynamic> json) => Asset(
-        id: json['id'],
-        name: json['name'],
-        parentId: json['parentId'],
-        locationId: json['locationId'],
-        sensorId: json['sensorId'],
-        sensorType: json['sensorType'],
-        status: json['status'],
-        gatewayId: json['gatewayId'],
+  factory Asset.fromMap(Map<String, dynamic> map) => Asset(
+        id: map['id'],
+        name: map['name'],
+        parentId: map['parentId'],
+        locationId: map['locationId'],
+        sensorId: map['sensorId'],
+        sensorType: map['sensorType'],
+        status: map['status'],
+        gatewayId: map['gatewayId'],
       );
+
+  Map<String, dynamic> toMap() {
+    return {'id': id, 'name': name, 'parentId': parentId, 'type': 'asset'};
+  }
+
+  factory Asset.fromJson(String json) => Asset.fromMap(jsonDecode(json));
+
+  String toJson() {
+    return jsonEncode(toMap());
+  }
 }

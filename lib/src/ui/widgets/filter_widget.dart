@@ -31,7 +31,6 @@ class _FilterWidgetState extends State<FilterWidget> {
   _applyFilters() {
     var cubit = injector.get<AssetTreeCubit>();
     cubit.filterAssetTree(
-        company: widget.company,
         search: _searchController.value.text,
         filterByEnergy: filterByEnergy,
         filterByCritical: filterByCritical);

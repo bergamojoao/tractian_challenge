@@ -3,11 +3,13 @@ class TreeNode<T> {
   final String id;
   final String? parentId;
   final List<TreeNode<dynamic>> children = [];
+  bool isExpanded = false;
 
   TreeNode({
     required this.content,
     required this.id,
     this.parentId,
+    this.isExpanded = false,
   });
 
   static TreeNode? buildTree({required List<TreeNode> data, String? parentId}) {
