@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'config/injector.dart';
 import 'data/models/company.dart';
-import 'interactors/cubits/asset_tree_cubit.dart';
-import 'interactors/cubits/home_cubit.dart';
 import 'ui/pages/assets_page.dart';
 import 'ui/pages/home_page.dart';
 
@@ -31,22 +27,14 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<HomeCubit>(
-            create: (BuildContext context) => injector.get<HomeCubit>()),
-        BlocProvider<AssetTreeCubit>(
-            create: (BuildContext context) => injector.get<AssetTreeCubit>()),
-      ],
-      child: MaterialApp.router(
-        title: 'Tractian Challenge',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
-        ),
-        routerConfig: _router,
+    return MaterialApp.router(
+      title: 'Tractian Challenge',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
       ),
+      routerConfig: _router,
     );
   }
 }

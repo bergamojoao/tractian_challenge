@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../config/injector.dart';
 import '../../data/models/company.dart';
-import '../../interactors/cubits/asset_tree_cubit.dart';
+import '../../interactors/stores/asset_tree_store.dart';
 import '../../utils/debouncer.dart';
 import 'filter_button.dart';
 
@@ -18,6 +18,7 @@ class FilterWidget extends StatefulWidget {
 }
 
 class _FilterWidgetState extends State<FilterWidget> {
+  var assetTreeStore = injector.get<AssetTreeStore>();
   bool filterByEnergy = false;
   bool filterByCritical = false;
   final _searchController = TextEditingController();
@@ -29,8 +30,7 @@ class _FilterWidgetState extends State<FilterWidget> {
   }
 
   _applyFilters() {
-    var cubit = injector.get<AssetTreeCubit>();
-    cubit.filterAssetTree(
+    assetTreeStore.filterAssetTree(
         search: _searchController.value.text,
         filterByEnergy: filterByEnergy,
         filterByCritical: filterByCritical);

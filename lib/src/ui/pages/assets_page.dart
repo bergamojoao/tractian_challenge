@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../config/injector.dart';
 import '../../data/models/company.dart';
-import '../../interactors/cubits/asset_tree_cubit.dart';
 import '../../interactors/states/asset_tree_state.dart';
+import '../../interactors/stores/asset_tree_store.dart';
 import '../widgets/asset_tree.dart';
 import '../widgets/default_app_bar.dart';
 import '../widgets/filter_widget.dart';
@@ -18,20 +18,19 @@ class AssetsPage extends StatefulWidget {
 }
 
 class _AssetsPageState extends State<AssetsPage> {
+  final assetTreeStore = injector.get<AssetTreeStore>();
   @override
   void initState() {
     super.initState();
 
-    var assetTreeCubit = injector.get<AssetTreeCubit>();
-
-    assetTreeCubit.loadAssetTree(company: widget.company);
+    assetTreeStore.loadAssetTree(company: widget.company);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AssetTreeCubit, AssetTreeState>(
-      builder: (context, state) {
-        var body = switch (state) {
+    return Observer(
+      builder: (context) {
+        var body = switch (assetTreeStore.state) {
           (LoadingAssetTreeState _) =>
             const Center(child: CircularProgressIndicator()),
           (GettedAssetTreeState state) => AssetTree(assetTree: state.assetTree),

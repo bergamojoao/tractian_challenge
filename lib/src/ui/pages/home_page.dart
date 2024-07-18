@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../config/injector.dart';
-import '../../interactors/cubits/home_cubit.dart';
 import '../../interactors/states/home_state.dart';
+import '../../interactors/stores/home_store.dart';
 import '../widgets/company_list.dart';
 import '../widgets/home_app_bar.dart';
 
@@ -15,13 +15,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final homeStore = injector.get<HomeStore>();
+
   @override
   void initState() {
     super.initState();
-
-    var homeCubit = injector.get<HomeCubit>();
-
-    homeCubit.loadHomeData();
+    homeStore.loadHomeData();
   }
 
   @override
@@ -31,8 +30,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(builder: (ctx, state) {
-      var body = switch (state) {
+    return Observer(builder: (ctx) {
+      var body = switch (homeStore.state) {
         (LoadingHomeState _) =>
           const Center(child: CircularProgressIndicator()),
         (GettedHomeState state) => CompanyList(companies: state.companies),

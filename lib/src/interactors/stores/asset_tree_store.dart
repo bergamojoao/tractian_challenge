@@ -1,4 +1,4 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../data/models/asset.dart';
 import '../../data/models/company.dart';
@@ -7,18 +7,27 @@ import '../../data/models/tree_node.dart';
 import '../../data/repositories/company_repository.dart';
 import '../states/asset_tree_state.dart';
 
-class AssetTreeCubit extends Cubit<AssetTreeState> {
-  final CompanyRepository companyRepository;
-  AssetTreeCubit(this.companyRepository) : super(const LoadingAssetTreeState());
+part 'asset_tree_store.g.dart';
 
+class AssetTreeStore = AssetTreeStoreBase with _$AssetTreeStore;
+
+abstract class AssetTreeStoreBase with Store {
+  final CompanyRepository companyRepository;
+
+  AssetTreeStoreBase(this.companyRepository);
+
+  @observable
+  AssetTreeState state = const LoadingAssetTreeState();
+
+  @action
   loadAssetTree({required Company company}) async {
-    emit(const LoadingAssetTreeState());
+    state = const LoadingAssetTreeState();
     try {
       var assetTree = await _getAssetTree(company);
 
-      emit(GettedAssetTreeState(company: company, assetTree: assetTree!));
+      state = GettedAssetTreeState(company: company, assetTree: assetTree!);
     } catch (e) {
-      emit(const FailureAssetTreeState('Error while loading asset tree'));
+      state = const FailureAssetTreeState('Error while loading asset tree');
     }
   }
 
@@ -57,6 +66,7 @@ class AssetTreeCubit extends Cubit<AssetTreeState> {
     return TreeNode.buildTree(data: nodeList, parentId: company.id);
   }
 
+  @action
   filterAssetTree(
       {required String search,
       required bool filterByEnergy,
@@ -67,7 +77,7 @@ class AssetTreeCubit extends Cubit<AssetTreeState> {
 
     var currentState = state as GettedAssetTreeState;
 
-    emit(const LoadingAssetTreeState());
+    state = const LoadingAssetTreeState();
     try {
       var assetTree = await _getAssetTree(currentState.company);
 
@@ -96,19 +106,17 @@ class AssetTreeCubit extends Cubit<AssetTreeState> {
         return true;
       });
 
-      emit(
-        GettedAssetTreeState(
-          company: currentState.company,
-          assetTree: filteredTree ??
-              TreeNode(
-                content: currentState.company,
-                id: currentState.company.id,
-                isExpanded: true,
-              ),
-        ),
+      state = GettedAssetTreeState(
+        company: currentState.company,
+        assetTree: filteredTree ??
+            TreeNode(
+              content: currentState.company,
+              id: currentState.company.id,
+              isExpanded: true,
+            ),
       );
     } catch (e) {
-      emit(const FailureAssetTreeState('Error while loading asset tree'));
+      state = const FailureAssetTreeState('Error while loading asset tree');
     }
   }
 }
